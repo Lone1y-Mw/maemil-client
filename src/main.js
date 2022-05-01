@@ -1,4 +1,5 @@
 import App from './App.svelte';
+import Toggle from './Toggle.svelte'
 
 const app = new App({
 	target: document.body,
