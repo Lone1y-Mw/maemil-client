@@ -7,6 +7,7 @@ export default {
   plugins: [
     '@snowpack/plugin-svelte',
     '@snowpack/plugin-dotenv',
+    '@snowpack/plugin-sass',
     [
       '@snowpack/plugin-typescript',
       {
@@ -15,6 +16,9 @@ export default {
       },
     ],
   ],
+  alias: {
+    '~': './src'
+  },
   routes: [
     /* Enable an SPA Fallback in development: */
     // {"match": "routes", "src": ".*", "dest": "/index.html"},
@@ -27,7 +31,7 @@ export default {
     /* ... */
   },
   devOptions: {
-    /* ... */
+    open: 'none'
   },
   buildOptions: {
     /* ... */
