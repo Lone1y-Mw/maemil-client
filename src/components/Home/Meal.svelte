@@ -1,20 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import getMeal from '~/functions/getMeal'
 	import { SyncLoader } from 'svelte-loading-spinners'
-	import Toggle from '~/components/Toggle.svelte'
+	import getMeal from '~/functions/getMeal'
 	import dayFormatter from '~/functions/dayFormatter'
+
+	let loading: boolean
 
     let today = new Date()
 
-	let loading = true
 	let mealList: string[] = [];
 
-	onMount(() => {
-		(async () => {
-			mealList = await getMeal(dayFormatter(today))
-			loading = false
-		})()
+	onMount(async () => {
+		loading = true
+		mealList = await getMeal(dayFormatter(today))
+		loading = false
 	})
 
 	let dateValue = dayFormatter(today, '-')
@@ -52,45 +51,39 @@
 	</div>
 </div>
 
-<style>
+<style lang="scss">
 	.meal {
-		padding: 1.5em;
-		border-radius: 40px 40px;
-		background-color: white;
+		height: 100%;
+		padding: 25px;
+		border-radius: 40px;
+		background-color: #fff;
 		box-shadow: 1px 1px 50px 5px #D3D3D3;
-	}
-
-	.meal-desc {
-		margin-bottom: 10px;
-	}
-
-	.meal-title {
-		font-weight: bold;
-		text-align: center;
-	}
-
-	.meal-content {
-		margin-bottom: 15px;
-	}
-
-	.meal-loader {
-        width: 50px;
-        height: 50px;
-        margin: auto;
-	}
-
-	.meal-item {
-		text-indent: 15px;
-	}
-
-	.meal-nomeal {
-		font-weight: bold;
-		color: #d9534f;
-		text-align: center;
-	}
-
-	.meal-selector {
-		width: fit-content;
-		margin: 0 auto;
+		.meal-desc {
+			margin-bottom: 10px;
+			.meal-title {
+				font-weight: bold;
+				text-align: center;
+			}
+		}
+		.meal-content {
+			margin-bottom: 15px;
+			.meal-loader {
+				width: 50px;
+				height: 50px;
+				margin: auto;
+			}
+			.meal-item {
+				text-indent: 15px;
+			}
+			.meal-nomeal {
+				font-weight: bold;
+				color: $text-color-warning;
+				text-align: center;
+			}
+		}
+		.meal-selector {
+			width: fit-content;
+			margin: 0 auto;
+		}
 	}
 </style>

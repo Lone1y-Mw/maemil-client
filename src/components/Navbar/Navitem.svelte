@@ -2,12 +2,12 @@
     import { link } from 'svelte-spa-router'
     import active from 'svelte-spa-router/active'
 
-    export let navlinkItem
+    export let navItem
 
-    const name = navlinkItem.name
-    const icon = navlinkItem.icon
-    const to = navlinkItem.to
-    const activePath = navlinkItem.activePath
+    const name = navItem.name
+    const icon = navItem.icon
+    const to = navItem.to
+    const activePath = navItem.activePath
 </script>
 
 <div class="navitem">
@@ -15,7 +15,7 @@
         href={to}
         use:link
         use:active={activePath}>
-        <div class="wrap">
+        <div class="btn">
             <div class="icon">
                 <svelte:component this={icon} />
             </div>
@@ -28,39 +28,35 @@
     .navitem {
         width: 50px;
         height: 50px;
-        border-radius: 10px;
-
         a {
-            &:focus > .wrap {
-                box-shadow: 0 0 0 0.2rem rgb(0 140 255 / 25%);
+            &:focus {
+                .btn {
+                    box-shadow: 0 0 0 0.2rem rgb(0 140 255 / 25%);
+                }
             }
-        }
-
-        .wrap {
-            width: 40px;
-            height: 40px;
-            margin: 5px;
-
-            .icon {
-                height: 24px;
-                text-align: center;
-            }
-
-            .name {
-                text-align: center;
-                color: #c7c7c7;
-                font-size: 10px;
-                font-weight: bold;
+            .btn {
+                width: 40px;
+                height: 40px;
+                margin: 5px;
+                .icon {
+                    height: 24px;
+                    text-align: center;
+                }
+                .name {
+                    text-align: center;
+                    color: $text-color-disabled;
+                    font-size: 10px;
+                    font-weight: bold;
+                }
             }
         }
     }
-        
 
-    :global(a.active > .wrap > .icon > svg) {
+    :global(a.active > .btn > .icon > svg) {
         fill: $primary-color-default;
     }
 
-    :global(a.active > .wrap > .name) {
+    :global(a.active > .btn > .name) {
         color: $primary-color-default!important;
     }
 </style>

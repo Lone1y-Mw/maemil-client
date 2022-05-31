@@ -11,38 +11,89 @@
     import getTodo from '~/functions/todo/getTodo'
     import randomString from '~/functions/randomString'
 
+    let loading: boolean
+
     type Todo = {
         todoId: string;
         done: boolean;
         desc: string;
     }
-
-    type Grdp = {
-        grade?: string;
-        group?: string;
-    }
-
-    let loading = true
     let todos: Todo[] = []
     let todo_done: string[] = JSON.parse(localStorage.getItem('todo-done') || '[]')
+
+    type Grdp = {
+        grd: number;
+        grp: number;
+    }
     let classes: Grdp[] = []
-    let grdpSp: string[] = localStorage.getItem('todo-grdp')?.split('-') || ['1', '1']
-    let grade = grdpSp[0]
-    let group = grdpSp[1]
-    let selected = grade + '-' + group
+
+    let todoLatestGrdp: Grdp = JSON.parse(localStorage.getItem('todo-latest-grdp') || '{ "grd": 1, "grp": 1 }')
+    let grd = todoLatestGrdp.grd
+    let grp = todoLatestGrdp.grp
+    let selected = grd + '-' + grp
 
     onMount(async () => {
         loading = true
-        todos = await getTodo(grade, group)
-        for(let td of todo_done) {
+        todos = await getTodo(grd, grp)
+        todo_done.forEach(td => {
             todos.map(t => {
-                if(t.todoId === td) {
-                    t.done = true
-                }
+                if(t.todoId === td) t.done = true
             })
-        }
+        })
         loading = false
     })
+
+    async function initClasses() {
+        const timetableList = await getTimetable()
+
+        for(let grd in timetableList) {
+            let timetable = timetableList[grd]
+            for(let grp in timetable) {
+                classes.push({ grd: +grd, grp: +grp })
+            }
+        }
+    }
+
+    function updateTododoneStorage(todo_done: string[]) {
+        localStorage.setItem('todo-done', JSON.stringify(todo_done))
+    }
+
+    async function handleNewtodo() {
+        const input = document.getElementsByClassName('new-todo-input')[0] as HTMLInputElement
+
+        if(input.value === '') return
+
+        const todoId = randomString()
+        const res = await regTodo(grd, grp, todoId, input.value)
+        if(res.success) {
+            const todo: Todo = {
+                todoId,
+                done: false,
+                desc: input.value
+            }
+            todos = [todo, ...todos]
+            input.value = ''
+        }
+    }
+
+    async function handleSelector(target: EventTarget) {
+        loading = true
+        const value = (target as HTMLSelectElement).value
+        const grdp = value.split('-')
+        grd = +grdp[0]
+        grp = +grdp[1]
+
+        localStorage.setItem('todo-latest-grdp', `{ "grd": ${grd}, "grp": ${grp} }`)
+        
+        todos = await getTodo(grd, grp)
+
+        todo_done.forEach(td => {
+            todos.map(t => {
+                if(t.todoId === td) t.done = true
+            })
+        })
+        loading = false
+    }
     
     const [send, receive] = crossfade({
         fallback(node) {
@@ -59,61 +110,6 @@
             }
         }
     })
-
-    async function initClasses() {
-        let timetableList = await getTimetable()
-    
-        for(let grd in timetableList) {
-            let timetable = timetableList[grd]
-            for(let grp in timetable) {
-                classes.push({ grade: grd, group: grp })
-            }
-        }
-    }
-
-    function updateTodoDoneStorage(todo_done: string[]) {
-        localStorage.setItem('todo-done', JSON.stringify(todo_done))
-    }
-
-    function handleNewtodobutton() {
-        const input = document.getElementsByClassName('new-todo-input')[0] as HTMLInputElement
-        if(input.value === '') return
-
-        const todoId = randomString()
-        regTodo(grade, group, todoId, input.value)
-        .then(res => {
-            if(res.success) {
-                const todo = {
-                    todoId,
-                    done: false,
-                    desc: input.value
-                }
-                todos = [todo, ...todos]
-                input.value = ''
-            }
-        })
-    }
-
-    async function handleOption(target: EventTarget) {
-        loading = true
-        const value = (target as HTMLSelectElement).value
-        const grdpList = value.split('-')
-        grade = grdpList[0]
-        group = grdpList[1]
-
-        localStorage.setItem('todo-grdp', value)
-
-        todos = await getTodo(grade, group)
-
-        for(let td of todo_done) {
-            todos.map(t => {
-                if(t.todoId === td) {
-                    t.done = true
-                }
-            })
-        }
-        loading = false
-    }
 </script>
 
 <div class="todo">
@@ -126,7 +122,7 @@
                 autocomplete="off" />
             <button
                 class="new-todo-button focus-shadow"
-                on:click={handleNewtodobutton}>확인</button>
+                on:click={handleNewtodo}>확인</button>
         </div>
         <div class="todo-input-desc">
             <span class="todo-text-warning">(주의)</span>
@@ -155,13 +151,13 @@
                                 on:change={() => {
                                     todo.done = !todo.done
                                     todo_done.push(todo.todoId)
-                                    updateTodoDoneStorage(todo_done)
+                                    updateTododoneStorage(todo_done)
                                 }}>
                             {todo.desc}
                             <button
                                 class="todo-btn-remove"
                                 on:click={() => {
-                                    removeTodo(grade, group, todo.todoId)
+                                    removeTodo(grd, grp, todo.todoId)
                                     .then(res => {
                                         if(res.success) {
                                             todos = todos.filter(t => t !== todo)
@@ -189,20 +185,18 @@
                                 on:change={() => {
                                     todo.done = !todo.done
                                     todo_done = todo_done.filter(t => t !== todo.todoId)
-                                    updateTodoDoneStorage(todo_done)
+                                    updateTododoneStorage(todo_done)
                                 }}>
                             {todo.desc}
                             <button
                                 class="todo-btn-remove"
-                                on:click={() => {
-                                    removeTodo(grade, group, todo.todoId)
-                                    .then(res => {
-                                        if(res.success) {
-                                            todos = todos.filter(t => t !== todo)
-                                            todo_done = todo_done.filter(t => t !== todo.todoId)
-                                            updateTodoDoneStorage(todo_done)
-                                        }
-                                    })
+                                on:click={async () => {
+                                    const res = await removeTodo(grd, grp, todo.todoId)
+                                    if(res.success) {
+                                        todos = todos.filter(t => t !== todo)
+                                        todo_done = todo_done.filter(t => t !== todo.todoId)
+                                        updateTododoneStorage(todo_done)
+                                    }
                                 }}>
                                 <BackspaceIcon />
                             </button>
@@ -218,11 +212,9 @@
                 <div class="todo-selector">
                     <select
                         bind:value={selected}
-                        on:change={e => {
-                            if(e?.target) handleOption(e.target)
-                        }}>
-                        {#each classes as { grade, group }}
-                            <option value={`${grade}-${group}`}>{`${grade}학년 ${group}반`}</option>
+                        on:change={e => e?.target && handleSelector(e.target)}>
+                        {#each classes as { grd, grp }}
+                            <option value={`${grd}-${grp}`}>{`${grd}학년 ${grp}반`}</option>
                         {/each}
                     </select>
                 </div>
@@ -230,100 +222,98 @@
     {/await}
 </div>
 
-<style class="scss">
+<style lang="scss">
     .todo {
-		max-width: 20em;
-        min-height: 180px;
-		padding: 1.5em;
-		border-radius: 40px 40px;
-		background-color: white;
+		max-width: 320px;
+        width: 100%;
+        height: 100%;
+		padding: 25px;
+		border-radius: 40px;
+		background-color: #fff;
 		box-shadow: 1px 1px 50px 5px #D3D3D3;
-    }
-
-    .start, .finish {
-        margin-bottom: 7px;
-    }
-
-    .todo-input {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .todo-input-desc {
-        font-size: 13px;
-        text-align: center;
-        margin-bottom: 10px;
-    }
-
-    .todo-text-warning {
-        color: #DC3545;
-    }
-
-    .new-todo-input {
-        width: calc(82% - 8px);
-        outline: none;
-        border: 1px solid #ccc;
-        padding: 10px 14px;
-        font-size: 15px;
-        border-radius: 5px;
-        margin-right: 8px;
-    }
-
-    .new-todo-button {
-        width: 18%;
-        height: 40px;
-        background: #7292ED;
-        color: #fff;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: bold;
-        border-radius: 10px;
-        border: none;
-    }
-
-    .todo-loader {
-        width: 50px;
-        height: 50px;
-        margin: auto;
-    }
-
-    .todo-over, .todo-under {
-        box-sizing: border-box;
-    }
-
-    .todo-under > label {
-        background-color: #7292ED;
-        color: #fff;
-    }
-
-    .todo-label {
-        position: relative;
-        display: block;
-        font-size: 1em;
-        line-height: 1;
-        padding: 0.5em;
-        margin: 0 auto 0.5em auto;
-        border-radius: 2px;
-        background-color: #eee;
-        user-select: none;
-        word-wrap: break-word;
-    }
-
-    .todo-btn-remove {
-        position: absolute;
-        top: 50%;
-        right: 0.5em;
-        transform: translateY(-50%);
-        box-sizing: border-box;
-        background-color: transparent;
-        border: none;
-        color: #d9534f;
-        cursor: pointer;
-    }
-
-    .todo-selector {
-        display: flex;
-        justify-content: center;
+        .top {
+            .todo-input {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+                .new-todo-input {
+                    width: calc(82% - 8px);
+                    outline: none;
+                    border: 1px solid #ccc;
+                    padding: 10px 14px;
+                    font-size: 15px;
+                    border-radius: 5px;
+                    margin-right: 8px;
+                }
+                .new-todo-button {
+                    width: 18%;
+                    height: 40px;
+                    background: $primary-color-default;
+                    color: #fff;
+                    cursor: pointer;
+                    font-size: 14px;
+                    font-weight: bold;
+                    border-radius: 10px;
+                    border: none;
+                }
+            }
+            .todo-input-desc {
+                font-size: 13px;
+                text-align: center;
+                margin-bottom: 10px;
+                .todo-text-warning {
+                    color: $text-color-warning;
+                }
+            }
+        }
+        .middle {
+            padding-bottom: 7px;
+            .todo-loader {
+                width: 50px;
+                height: 50px;
+                margin: auto;
+            }
+            .todo-over, .todo-under {
+                box-sizing: border-box;
+                .start, .finish {
+                    margin-bottom: 7px;
+                }
+                .todo-label {
+                    position: relative;
+                    display: block;
+                    font-size: 16px;
+                    line-height: 1;
+                    padding: 8px;
+                    margin: 0 auto 8px;
+                    border-radius: 2px;
+                    background-color: #eee;
+                    user-select: none;
+                    word-wrap: break-word;
+                }
+                .todo-btn-remove {
+                    position: absolute;
+                    top: 50%;
+                    right: 8px;
+                    transform: translateY(-50%);
+                    box-sizing: border-box;
+                    background-color: transparent;
+                    border: none;
+                    color: $text-color-warning;
+                    cursor: pointer;
+                }
+            }
+            .todo-under {
+                .todo-label {
+                    background-color: $primary-color-default;
+                    color: #fff;
+                }
+            }
+        }
+        .bottom {
+            .todo-selector {
+                display: flex;
+                justify-content: center;
+            }
+        }
     }
 </style>

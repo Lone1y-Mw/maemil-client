@@ -6,8 +6,8 @@ import Article from '~/components/Community/Article.svelte'
 
 export default {
     '/': Home,
-    '/community': Community,
-    '/community/:href': Article,
-    '/login': Login,
-    '/register': Register
+    // '/community': Community,
+    // '/community/:href': Article,
+    // '/login': Login,
+    // '/register': Register
 }

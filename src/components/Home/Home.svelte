@@ -6,18 +6,10 @@
 </script>
 
 <div class="home">
-    <div>
-        <Todo />
-    </div>
-    <div>
-        <Timetable />
-    </div>
-    <div>
-        <Meal />
-    </div>
-    <div>
-        <Schedule />
-    </div>
+    <Todo />
+    <Timetable />
+    <Meal />
+    <Schedule />
 </div>
 
 <style lang="scss">
@@ -26,9 +18,9 @@
         justify-content: center;
         flex-direction: row;
         flex-wrap: wrap;
-
-        & > * {
-            margin: 15px;
-        }
+    }
+    
+    :global(.home > *) {
+        margin: 15px;
     }
 </style>

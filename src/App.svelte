@@ -2,9 +2,9 @@
 	import { onMount } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import Router from 'svelte-spa-router'
-	import routes from './routes'
     import Navbar from './components/Navbar/Navbar.svelte'
-	import Footer from '~/components/Footer.svelte'
+	import routes from './routes'
+	import Footer from './components/Footer.svelte'
 
 	let isMount = false
 	onMount(() => isMount = true)
