@@ -28,7 +28,7 @@
     })() || month
 
     function changeBoxStyle(schedule: any) {
-        if(scheduleList.length >= 12) schedule.style.borderRadius = '40px 0 0 40px'
+        if(scheduleList.length >= 11) schedule.style.borderRadius = '40px 0 0 40px'
         else schedule.style.borderRadius = '40px'
     }
 
@@ -97,7 +97,9 @@
 
 <style lang="scss">
     .schedule {
-        max-height: 300px;
+        min-width: 250px;
+        min-height: 88px;
+        max-height: 235px;
         height: 100%;
         overflow: auto;
 		padding: 25px;
@@ -118,9 +120,9 @@
                 margin: auto;
             }
             .schedule-item {
+                margin: 0 0 0 16%;
                 display: flex;
                 .schedule-date {
-                    text-indent: 15px;
                     margin-right: 10px;
                 }
             }

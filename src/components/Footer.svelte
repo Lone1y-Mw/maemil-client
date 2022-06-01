@@ -16,10 +16,9 @@
 <style lang="scss">
     .footer {
         width: 85%;
-        margin: 0 auto;
+        margin: 65px auto;
         text-align: center;
         font-size: 14px;
-        margin-top: 64px;
         .title {
             font-weight: bold;
             margin-bottom: 7px;

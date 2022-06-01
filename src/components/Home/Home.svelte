@@ -14,6 +14,8 @@
 
 <style lang="scss">
     .home {
+        max-width: 900px;
+        margin: 0 auto;
         display: flex;
         justify-content: center;
         flex-direction: row;

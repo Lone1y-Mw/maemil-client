@@ -224,7 +224,7 @@
 
 <style lang="scss">
     .todo {
-		max-width: 320px;
+		max-width: 290px;
         width: 100%;
         height: 100%;
 		padding: 25px;
@@ -237,7 +237,7 @@
                 align-items: center;
                 margin-bottom: 10px;
                 .new-todo-input {
-                    width: calc(82% - 8px);
+                    width: calc(80% - 8px);
                     outline: none;
                     border: 1px solid #ccc;
                     padding: 10px 14px;
@@ -246,7 +246,7 @@
                     margin-right: 8px;
                 }
                 .new-todo-button {
-                    width: 18%;
+                    width: 20%;
                     height: 40px;
                     background: $primary-color-default;
                     color: #fff;

@@ -23,7 +23,7 @@
 <div class="meal">
 	<div class="meal-desc">
 		<div class="meal-title">
-			<span>급식 🍚</span>
+			<div>급식 🍚</div>
 		</div>
 	</div>
 	<div class="meal-content">
@@ -53,6 +53,8 @@
 
 <style lang="scss">
 	.meal {
+		min-width: 290px;
+		min-height: 88px;
 		height: 100%;
 		padding: 25px;
 		border-radius: 40px;
@@ -64,6 +66,9 @@
 				font-weight: bold;
 				text-align: center;
 			}
+			.meal-notification {
+				display: flex;
+			}
 		}
 		.meal-content {
 			margin-bottom: 15px;
@@ -73,7 +78,7 @@
 				margin: auto;
 			}
 			.meal-item {
-				text-indent: 15px;
+                margin: 0 0 0 16%;
 			}
 			.meal-nomeal {
 				font-weight: bold;

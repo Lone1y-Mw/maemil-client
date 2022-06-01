@@ -1,3 +1,8 @@
 .snowpack
 build
 node_modules
+
+# custom
+public/firebase-messaging-sw.js
+src/firebase/firebaseConfig.ts
+.env

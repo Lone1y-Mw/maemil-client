@@ -73,6 +73,7 @@
     .timetable {
         position: relative;
 		min-width: 250px;
+        height: 385px;
 		padding: 25px;
 		border-radius: 40px;
 		background-color: #fff;
