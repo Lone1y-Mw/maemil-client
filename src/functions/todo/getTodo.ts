@@ -1,5 +1,5 @@
 async function getTodo(grd: number, grp: number) {
-    return await fetch('http://localhost:5000/api/todo/getTodo', {
+    return await fetch('https://api.maemil.kr/api/todo/getTodo', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

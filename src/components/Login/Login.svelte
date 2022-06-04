@@ -2,7 +2,7 @@
     let id = '', password = ''
 
     async function submit() {
-        let data = await fetch('http://localhost:5000/api/session/login', {
+        let data = await fetch('https://api.maemil.kr/api/session/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -19,18 +19,11 @@
         if(isMount) {
             loading = true
             let schedule = document.getElementsByClassName('schedule')[0]
-            changeBoxStyle(schedule)
             let tailDate = getTailDate(new Date(year, month - 1))
             scheduleList = await getSchedule(tailDate.startDay, tailDate.endDay)
-            changeBoxStyle(schedule)
             loading = false
         }
     })() || month
-
-    function changeBoxStyle(schedule: any) {
-        if(scheduleList.length >= 11) schedule.style.borderRadius = '40px 0 0 40px'
-        else schedule.style.borderRadius = '40px'
-    }
 
     function YMD2prettyMD(ymd: string) {
         return [ymd.slice(4, 6), '.', ymd.slice(6, 8)].join('')
@@ -73,7 +66,7 @@
     <div class="schedule-desc">
         <div class="schedule-title">
 			<button on:click={prevSch}>&lt;</button>
-            <span>{year}년 {month}월 일정 📅</span>
+            <span>{year}년 {month}월 일정 📆</span>
 			<button on:click={nextSch}>&gt;</button>
         </div>
     </div>
@@ -97,20 +90,23 @@
 
 <style lang="scss">
     .schedule {
-        min-width: 250px;
+		margin: 0 auto;
+        width: 250px;
         min-height: 88px;
         max-height: 235px;
         height: 100%;
         overflow: auto;
 		padding: 25px;
-		border-radius: 40px;
-		background-color: white;
-		box-shadow: 1px 1px 50px 5px #D3D3D3;
+		border-radius: 20px;
+		box-shadow: 1px 1px 7px 2px #d3d3d3;
         .schedule-desc {
             margin-bottom: 10px;
             .schedule-title {
                 font-weight: bold;
                 text-align: center;
+                button {
+                    padding: 3px 5px;
+                }
             }
         }
         .schedule-contents {

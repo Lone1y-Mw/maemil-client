@@ -1,5 +1,5 @@
 async function getBoard(arc: number) {
-    const data = await fetch('http://localhost:5000/api/board/getBoard', {
+    const data = await fetch('https://api.maemil.kr/api/board/getBoard', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

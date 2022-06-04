@@ -1,5 +1,5 @@
 async function regTodo(grd: number, grp: number, todoId: string, desc: string) {
-    return await fetch('http://localhost:5000/api/todo/regTodo', {
+    return await fetch('https://api.maemil.kr/api/todo/regTodo', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

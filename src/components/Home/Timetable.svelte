@@ -1,6 +1,7 @@
 <script lang="ts">
     import getTimetable from '~/functions/getTimetable'
 	import { SyncLoader } from 'svelte-loading-spinners'
+    import updateGrdp from '~/firebase/updateGrdp'
 
     let timetableList: any[][][][]
 
@@ -14,6 +15,8 @@
         grp: string;
     }
     let classes: Grdp[] = []
+
+    const weekDay = ['월', '화', '수', '목', '금']
 
     async function init() {
         timetableList = await getTimetable()
@@ -33,12 +36,18 @@
         grp = grdp[1]
 
         localStorage.setItem('timetable-latest-grdp', value)
+        updateGrdp(value)
     }
 </script>
 
 <div class="timetable">
     <div class="timetable-desc">
-        <div class="timetable-title">시간표 {selected}</div>
+        <div class="timetable-title">
+            시간표
+            <span class="title-grdp">
+                {selected}
+            </span>
+        </div>
     </div>
     {#await init()}
         <div class="timetable-loader">
@@ -46,16 +55,25 @@
         </div>
         {:then}
             <div class="timetable-contents">
-                {#each timetableList[+grd][+grp] as timetable}
-                    <div class="column">
-                        {#each timetable as { subject, teacher }}
-                            <div class="item">
-                                <div class="subject">{subject == '' ? '-' : subject}</div>
-                                <div class="teacher">{teacher == '' ? '-' : teacher}</div>
-                            </div>
-                        {/each}
-                    </div>
-                {/each}
+                <div class="timetable-weekday">
+                    {#each weekDay as day}
+                        <div class="timetable-day">
+                            {day}
+                        </div>
+                    {/each}
+                </div>
+                <div class="timetable-main">
+                    {#each timetableList[+grd][+grp] as timetable}
+                        <div class="column">
+                            {#each timetable as { subject, teacher }}
+                                <div class="item">
+                                    <div class="subject">{subject == '' ? '-' : subject}</div>
+                                    <div class="teacher">{teacher == '' ? '-' : teacher}</div>
+                                </div>
+                            {/each}
+                        </div>
+                    {/each}
+                </div>
             </div>
             <div class="selector">
                 <select
@@ -71,18 +89,22 @@
 
 <style lang="scss">
     .timetable {
+		margin: 0 auto 30px;
         position: relative;
-		min-width: 250px;
-        height: 385px;
+		width: 250px;
+        height: 410px;
 		padding: 25px;
-		border-radius: 40px;
+		border-radius: 20px;
 		background-color: #fff;
-		box-shadow: 1px 1px 50px 5px #D3D3D3;
+		box-shadow: 1px 1px 7px 2px #d3d3d3;
         .timetable-desc {
             .timetable-title {
                 font-weight: bold;
                 margin-bottom: 10px;
                 text-align: center;
+                .title-grdp {
+                    color: $primary-color-default;
+                }
             }
         }
         .timetable-loader {
@@ -92,20 +114,37 @@
             transform: translate(-50%, -50%);
         }
         .timetable-contents {
-            display: flex;
             margin-bottom: 15px;
-            .column {
+            .timetable-weekday {
                 display: flex;
-                flex-direction: column;
-                flex: 1;
-                .item {
+                .timetable-day {
                     width: 100%;
                     box-sizing: border-box;
                     text-align: center;
                     background-color: #fff;
-                    border: 1px solid #444;
-                    .subject, .teacher {
-                        font-size: 15px;
+                    border: 1px solid $primary-color-default;
+                    color: $primary-color-default;
+                    font-weight: bold;
+                }
+            }
+            .timetable-main {
+                display: flex;
+                .column {
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    .item {
+                        width: 100%;
+                        box-sizing: border-box;
+                        text-align: center;
+                        background-color: #fff;
+                        border: 1px solid $primary-color-default;
+                        .subject, .teacher {
+                            font-size: 15px;
+                        }
+                        .subject {
+                            font-weight: bold;
+                        }
                     }
                 }
             }

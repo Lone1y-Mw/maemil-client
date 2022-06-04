@@ -1,5 +1,5 @@
 async function getMeal(date: string) {
-    let data = await fetch('http://localhost:5000/api/getMeal', {
+    let data = await fetch('https://api.maemil.kr/api/getMeal', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

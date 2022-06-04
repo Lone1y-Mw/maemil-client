@@ -1,5 +1,5 @@
 async function getArticle(href: string) {
-    const data = await fetch('http://localhost:5000/api/board/getArticle', {
+    const data = await fetch('https://api.maemil.kr/api/board/getArticle', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

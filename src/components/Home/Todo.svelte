@@ -137,7 +137,7 @@
             {:else}
                 <div class="todo-over">
                     <div class="start">
-                        <span>시작 🚀</span>
+                        <span>🔥 시작 🔥</span>
                     </div>
                     {#each todos.filter(t => !t.done) as todo (todo.todoId)}
                         <label
@@ -171,7 +171,7 @@
                 </div>
                 <div class="todo-under">
                     <div class="finish">
-                        <span>끝 🌌</span>
+                        <span>🎉 끝 🎉</span>
                     </div>
                     {#each todos.filter(t => t.done) as todo (todo.todoId)}
                         <label
@@ -224,13 +224,14 @@
 
 <style lang="scss">
     .todo {
+		margin: 0 auto 30px;
 		max-width: 290px;
         width: 100%;
         height: 100%;
 		padding: 25px;
-		border-radius: 40px;
+		border-radius: 20px;
 		background-color: #fff;
-		box-shadow: 1px 1px 50px 5px #D3D3D3;
+		box-shadow: 1px 1px 7px 2px #d3d3d3;
         .top {
             .todo-input {
                 display: flex;
@@ -261,6 +262,7 @@
                 font-size: 13px;
                 text-align: center;
                 margin-bottom: 10px;
+                color: $text-color-warning;
                 .todo-text-warning {
                     color: $text-color-warning;
                 }
@@ -277,6 +279,8 @@
                 box-sizing: border-box;
                 .start, .finish {
                     margin-bottom: 7px;
+                    font-weight: bold;
+                    text-align: center;
                 }
                 .todo-label {
                     position: relative;

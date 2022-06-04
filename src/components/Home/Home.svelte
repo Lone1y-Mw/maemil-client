@@ -14,15 +14,9 @@
 
 <style lang="scss">
     .home {
-        max-width: 900px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    
-    :global(.home > *) {
-        margin: 15px;
+        // display: flex;
+        // justify-content: center;
+        // flex-direction: row;
+        // flex-wrap: wrap;
     }
 </style>

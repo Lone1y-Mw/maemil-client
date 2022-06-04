@@ -53,13 +53,14 @@
 
 <style lang="scss">
 	.meal {
-		min-width: 290px;
+		margin: 0 auto 30px;
+		width: 250px;
 		min-height: 88px;
 		height: 100%;
 		padding: 25px;
-		border-radius: 40px;
+		border-radius: 20px;
 		background-color: #fff;
-		box-shadow: 1px 1px 50px 5px #D3D3D3;
+		box-shadow: 1px 1px 7px 2px #d3d3d3;
 		.meal-desc {
 			margin-bottom: 10px;
 			.meal-title {

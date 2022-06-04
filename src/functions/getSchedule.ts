@@ -1,5 +1,5 @@
 async function getSchedule(startDay: string, endDay: string) {
-    let data = await fetch('http://localhost:5000/api/getSchedule', {
+    let data = await fetch('https://api.maemil.kr/api/getSchedule', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

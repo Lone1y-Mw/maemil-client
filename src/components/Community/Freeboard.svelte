@@ -69,7 +69,7 @@
         width: fit-content;
         margin: 0 auto;
 		padding: 1.7em;
-		border-radius: 40px 40px;
+		border-radius: 20px;
 		background-color: white;
 		box-shadow: 1px 1px 50px 5px #D3D3D3;
     }

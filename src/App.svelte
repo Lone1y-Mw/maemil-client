@@ -7,17 +7,15 @@
 	
 	const { setToken } = useMessaging()
 
-	let showNotificationModal: boolean
-	if (Notification.permission === 'granted') {
-		setToken()
-		showNotificationModal = false
+	let showNotificationModal: boolean = false
+	if ("Notification" in window) {
+		if (Notification.permission === 'granted') setToken()
+		else if (Notification.permission === 'default') showNotificationModal = true
+		else if (Notification.permission === 'denied') showNotificationModal = true
 	}
-	else if (Notification.permission === 'default') showNotificationModal = true
-	else if (Notification.permission === 'denied') showNotificationModal = true
 </script>
 
-<div
-	id="app">
+<div id="app">
 	{#if showNotificationModal}
 		<div class="not-modal">
 			<div class="body">
