@@ -1,6 +1,7 @@
 <div class="comingsoon">
     <div class="desc">
-        Coming Soon!<br />Since <span class="since">8.24</span>
+        <div class="comingsoon-main">Coming Soon!</div>
+        Wait for <span class="since">8.24</span> update!
     </div>
     <div class="author">
         - NSMS Programmers 동아리 -
@@ -13,9 +14,12 @@
         text-align: center;
         .desc {
             font-weight: bold;
-            font-size: 50px;
+            font-size: 30px;
             color: $primary-color-default;
             margin-bottom: 20px;
+            .comingsoon-main {
+                font-size: 50px;
+            }
             .since {
                 text-decoration: underline dashed;
             }
